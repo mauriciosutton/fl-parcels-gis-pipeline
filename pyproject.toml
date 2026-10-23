@@ -1,0 +1,29 @@
+[project]
+name = "flparcels"
+version = "0.1.0"
+description = "Florida DOR statewide parcels -> vector PMTiles (tippecanoe)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.43.118",
+    "duckdb>=2.0.0",
+    "numpy>=2.5.4",
+    "pmtiles>=3.8.1",
+    "pyarrow>=26.0.0",
+    "pyogrio>=0.13.0",
+    "pyproj>=3.8.0",
+    "shapely>=2.2.0",
+]
+
+[project.scripts]
+flparcels = "flparcels.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,10 @@
+data/
+.venv/
+explore/.venv/
+explore/profile/
+__pycache__/
+.pytest_cache/
+*.mbtiles
+*.pmtiles
+
+.env

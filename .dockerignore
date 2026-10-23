@@ -1,0 +1,9 @@
+data/
+explore/
+.venv/
+**/__pycache__/
+.pytest_cache/
+*.mbtiles
+*.pmtiles
+
+.env
