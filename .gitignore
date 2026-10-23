@@ -8,3 +8,7 @@ __pycache__/
 *.pmtiles
 
 .env
+
+# map demo: local token and local test tiles
+web/config.js
+web/dev-data/
