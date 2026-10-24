@@ -7,6 +7,16 @@ Turns the Florida Department of Revenue statewide cadastral download (`Cadastral
 - `data/build/fl_parcels/lookup.parquet`: every tax roll record with full detail (owner, values, legal
   description, sale book/page), keyed by the tile feature id `fid`, for click-through lookups
 
+## Live demo
+
+**[fl-parcels-web.vercel.app](https://fl-parcels-web.vercel.app/)** shows the tiles this pipeline produces for
+**Brevard County** (DOR county 15, about 318k parcel features). Hover a parcel to highlight it, click it for its
+address, land use, values, acreage and year built, and switch between satellite, street and light basemaps.
+
+The demo is a static page in [`web/`](web/) (MapLibre GL JS reading the PMTiles archive straight from object storage
+over HTTP range requests, with a Mapbox basemap). It covers one county because that is the pilot build; the pipeline
+itself builds the whole state. See [`web/README.md`](web/README.md) for how it is configured and deployed.
+
 ## Pipeline
 
 | Step | Does | Output |
