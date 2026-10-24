@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Florida Parcels</title>
+  <meta name="description" content="Interactive map of Florida parcels and their 2026 tax roll attributes, from the Florida Department of Revenue, served as PMTiles vector tiles.">
+  <!-- Mapbox token URL restrictions match on the Referer header, so keep the browser default (the origin is sent). -->
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%231d2433'/%3E%3Cpath d='M3 3h5v4H3zM9 3h4v6H9zM3 8h5v5H3zM9 10h4v3H9z' fill='%23f0e442'/%3E%3C/svg%3E">
+
+  <!-- Pinned library versions. Keep the maplibre-gl version in sync with the import in app.js. -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@6.11.2/dist/maplibre-gl.css"
+        integrity="sha384-ntw3zEt6rcVML7jDK0ULmHa5hxLB23afsPqzqfY+gLgMfAkbFCnCgPpkZvV5mmZX" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Deferred and module scripts run in document order once the page is parsed:
+       config.js (may 404 when not set up; app.js handles that), then pmtiles (global `pmtiles`), then app.js. -->
+  <script defer src="config.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/pmtiles@4.5.0/dist/pmtiles.js"
+          integrity="sha384-pbKNZbDshUsLnZMIVsn/t+j3xEY9PGfuX5Z22l5rcy/obXz3EwaMx1F5d9sRsJMn" crossorigin="anonymous"></script>
+  <script type="module" src="app.js" onerror="document.getElementById('boot-error').hidden = false"></script>
+</head>
+<body>
+  <div id="map" role="region" aria-label="Map of Florida parcels"></div>
+
+  <section class="card controls" id="controls" aria-labelledby="app-title">
+    <header class="controls__header">
+      <div>
+        <h1 class="controls__title" id="app-title">Florida Parcels</h1>
+        <p class="controls__subtitle">2026 tax roll &middot; Florida Department of Revenue</p>
+      </div>
+      <button type="button" class="controls__toggle" id="controls-toggle" aria-expanded="true" aria-controls="controls-body">
+        Legend
+      </button>
+    </header>
+
+    <div class="controls__body" id="controls-body">
+      <div class="field">
+        <h2 class="field__label" id="basemap-label">Basemap</h2>
+        <div class="segmented" id="basemap-toggle" role="group" aria-labelledby="basemap-label"></div>
+      </div>
+
+      <div class="field">
+        <label class="field__label field__label--row" for="opacity">
+          <span>Fill opacity</span><output id="opacity-value" for="opacity"></output>
+        </label>
+        <input type="range" id="opacity" min="0" max="100" step="5" value="55">
+      </div>
+
+      <div class="field">
+        <h2 class="field__label">Land use</h2>
+        <ul class="legend" id="legend"></ul>
+      </div>
+
+      <p class="fineprint">
+        Click a parcel for details. At zoom 12&ndash;13 dense areas are thinned; zoom in to see every parcel.
+        Owner names are deliberately not published in these tiles.
+      </p>
+    </div>
+  </section>
+
+  <div class="status" id="status">
+    <p class="boot-error" id="boot-error" role="alert" hidden>
+      The map failed to load. Check your connection, or that the CDN at cdn.jsdelivr.net isn't blocked.
+    </p>
+    <div class="pill" id="zoom-hint" hidden>
+      <span id="zoom-hint-text">Zoom in to see parcels</span>
+      <button type="button" id="zoom-hint-btn">Zoom in</button>
+    </div>
+    <div class="notices" id="notices" aria-live="polite"></div>
+  </div>
+
+  <aside class="card details" id="details" aria-labelledby="details-title" hidden>
+    <header class="details__header">
+      <div class="details__heading">
+        <p class="details__eyebrow"><span class="swatch" id="details-swatch"></span><span id="details-group"></span></p>
+        <h2 class="details__title" id="details-title"></h2>
+        <p class="details__sub" id="details-sub"></p>
+      </div>
+      <button type="button" class="icon-btn" id="details-close" aria-label="Close parcel details">
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3.5 3.5l9 9m0-9l-9 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+    <p class="details__note" id="details-note" hidden></p>
+    <div class="details__body" id="details-body"></div>
+  </aside>
+
+  <div class="hover-tip" id="hover-tip" hidden></div>
+
+  <noscript><p class="boot-error">This map needs JavaScript.</p></noscript>
+</body>
+</html>
