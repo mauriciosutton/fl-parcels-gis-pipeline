@@ -93,10 +93,11 @@ it with the other files.
 
 ### Vercel
 
-The repository root has a `vercel.json` that runs `node web/build-config.mjs` as the build command and serves `web/`.
-The script writes `web/config.js` from environment variables, so the token never lives in the repository. Import the
-repository with the root directory left at the repository root (not `web`), and set in Project Settings →
-Environment Variables:
+`build-config.mjs` writes `web/config.js` from environment variables, so the token never lives in the repository.
+There are two `vercel.json` files so the project works with either Root Directory setting: the one at the repository
+root (Root Directory left blank) runs `node web/build-config.mjs` and serves `web/`; the one in `web/` (Root Directory
+set to `web`) runs `node build-config.mjs` and serves the folder itself. Set in Project Settings → Environment
+Variables:
 
 | Variable | Required | Value |
 |---|---|---|
