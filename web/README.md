@@ -88,8 +88,25 @@ shows the error.
 ## Deploying
 
 The site is plain static files; any static host works. `config.js` is gitignored, so a host that builds from the
-repository (e.g. GitHub Pages) won't have it and falls back to `config.example.js`. Either generate `config.js`
-in the deploy step (e.g. a Pages workflow writing it from repository variables) or upload it with the other files.
+repository won't have it and falls back to `config.example.js`. Generate `config.js` in the deploy step, or upload
+it with the other files.
+
+### Vercel
+
+The repository root has a `vercel.json` that runs `node web/build-config.mjs` as the build command and serves `web/`.
+The script writes `web/config.js` from environment variables, so the token never lives in the repository. Import the
+repository with the root directory left at the repository root (not `web`), and set in Project Settings →
+Environment Variables:
+
+| Variable | Required | Value |
+|---|---|---|
+| `PMTILES_URL` | yes | absolute `https://` URL of the public `.pmtiles` file |
+| `MAPBOX_TOKEN` | no | public `pk.` token, URL-restricted to your Vercel domain; without it there is no basemap |
+| `DEFAULT_BASEMAP` | no | `satellite` (default), `streets`, `light` or `none` |
+
+The build fails with a clear message if `PMTILES_URL` is missing or not https, or if the token is a secret `sk.` token.
+Variables are read at build time, so redeploy after changing them. The values still end up in the served `config.js`;
+they are public by nature, and the domain restriction on the token is what protects it.
 
 ## Notes on the tiles
 
